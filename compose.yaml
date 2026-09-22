@@ -1,0 +1,23 @@
+name: homebase
+
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-homebase}
+      POSTGRES_USER: ${POSTGRES_USER:-homebase}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-homebase}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-homebase} -d ${POSTGRES_DB:-homebase}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
