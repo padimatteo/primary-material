@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date as Date, datetime
 from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated, Any
@@ -42,7 +42,7 @@ class CoffeeSchema(BaseModel):
 
 
 class CoffeeEntryCreate(CoffeeSchema):
-    date: date
+    date: Date
     roaster: LookupName
     product: LookupName
     roast_level: ScaleValue
@@ -62,7 +62,7 @@ class CoffeeEntryCreate(CoffeeSchema):
 
 
 class CoffeeEntryUpdate(CoffeeSchema):
-    date: date | None = None
+    date: Date | None = None
     roaster: LookupName | None = None
     product: LookupName | None = None
     roast_level: ScaleValue | None = None
@@ -99,7 +99,7 @@ class CoffeeEntryResponse(CoffeeSchema):
     model_config = ConfigDict(from_attributes=True, extra="forbid")
 
     id: UUID
-    date: date
+    date: Date
     roaster: str = Field(validation_alias=AliasPath("product", "roaster", "name"))
     product: str = Field(validation_alias=AliasPath("product", "name"))
     roast_level: int
@@ -150,8 +150,8 @@ class CoffeeEntryListQuery(CoffeeSchema):
     recipe_type: RecipeType | None = None
     roast_level: ScaleValue | None = None
     rating: ScaleValue | None = None
-    date_from: date | None = None
-    date_to: date | None = None
+    date_from: Date | None = None
+    date_to: Date | None = None
     sort_by: SortField = SortField.DATE
     sort_dir: SortDirection = SortDirection.DESC
     limit: Annotated[int, Field(ge=1, le=100)] = 20
