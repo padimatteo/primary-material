@@ -64,6 +64,7 @@ Terminal 1 — API:
 
 ```powershell
 Set-Location backend
+uv run alembic upgrade head # runs migrations
 uv run fastapi dev
 ```
 

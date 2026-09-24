@@ -5,8 +5,8 @@ from sqlalchemy import engine_from_config, pool
 
 from app.config import DATABASE_URL
 from app.database import Base
+import app.coffee.models  # noqa: F401
 
-# Import model modules here as they are added so their tables register on Base.metadata.
 target_metadata = Base.metadata
 config = context.config
 if config.config_file_name is not None:
