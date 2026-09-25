@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.coffee.routes import router as coffee_router
 from app.routes import router
 
-
 app = FastAPI(
     title="Homebase API",
     version="0.1.0",

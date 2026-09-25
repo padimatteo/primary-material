@@ -1,11 +1,11 @@
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+import app.coffee.models  # noqa: F401
+from alembic import context
 from app.config import DATABASE_URL
 from app.database import Base
-import app.coffee.models  # noqa: F401
 
 target_metadata = Base.metadata
 config = context.config

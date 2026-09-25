@@ -1,8 +1,8 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
-from sqlalchemy import func, or_, select
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from sqlalchemy import exists, func, or_, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.coffee import service
@@ -13,11 +13,13 @@ from app.coffee.schemas import (
     CoffeeEntryListQuery,
     CoffeeEntryResponse,
     CoffeeEntryUpdate,
+    CoffeeSuggestions,
+    CoffeeSuggestionsQuery,
     SortDirection,
     SortField,
+    SuggestionField,
 )
 from app.database import get_db
-
 
 router = APIRouter(prefix="/coffee/recipes", tags=["coffee"])
 DbSession = Annotated[Session, Depends(get_db)]
@@ -76,6 +78,39 @@ def list_recipes(
     )
     items = list(session.scalars(statement).all())
     return CoffeeEntryList(items=items, total=total, limit=query.limit, offset=query.offset)
+
+
+@router.get("/suggestions", response_model=CoffeeSuggestions)
+def suggest_names(
+    session: DbSession,
+    query: Annotated[CoffeeSuggestionsQuery, Query()],
+) -> CoffeeSuggestions:
+    if query.field is SuggestionField.ROASTER:
+        name = Roaster.name
+        referenced = exists(
+            select(CoffeeEntry.id)
+            .join(Product, CoffeeEntry.product_id == Product.id)
+            .where(Product.roaster_id == Roaster.id)
+        )
+        statement = select(name).where(referenced)
+    elif query.field is SuggestionField.PRODUCT:
+        name = Product.name
+        referenced = exists(select(CoffeeEntry.id).where(CoffeeEntry.product_id == Product.id))
+        statement = (
+            select(name)
+            .join(Roaster, Product.roaster_id == Roaster.id)
+            .where(func.lower(Roaster.name) == query.roaster.lower(), referenced)
+        )
+    else:
+        name = Grinder.name
+        referenced = exists(select(CoffeeEntry.id).where(CoffeeEntry.grinder_id == Grinder.id))
+        statement = select(name).where(referenced)
+
+    if query.q:
+        escaped = query.q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        statement = statement.where(name.ilike(f"{escaped}%", escape="\\"))
+    values = session.scalars(statement.order_by(func.lower(name), name).limit(query.limit)).all()
+    return CoffeeSuggestions(values=list(values))
 
 
 @router.get("/{entry_id}", response_model=CoffeeEntryResponse)

@@ -1,13 +1,13 @@
 # Coffee backend implementation plan
 
-Status: Steps 1–4 complete; steps 5–6 pending
+Status: Steps 1–5 complete; step 6 pending
 
 Source of truth: [coffee.spec.md](coffee.spec.md)  
 Scope: Database, FastAPI endpoints, backend tests, and setup documentation. The Coffee page UI is a later phase with its own specification.
 
 ## Current progress
 
-Database foundations, models and schemas, transactional lookup resolution, and the five recipe endpoints are complete. Typeahead suggestions, integration tests, and developer instructions remain. The existing `/api/hello` and `/api/health` endpoints must keep working.
+Database foundations, models and schemas, transactional lookup resolution, the five recipe endpoints, and typeahead suggestions are complete. The remaining backend integration tests and developer instructions in step 6 are pending. The existing `/api/hello` and `/api/health` endpoints must keep working.
 
 ## Implementation sequence
 
@@ -54,10 +54,10 @@ Database foundations, models and schemas, transactional lookup resolution, and t
 
 ### 5. Add typeahead suggestions
 
-- [ ] Register `GET /suggestions` before `GET /{id}`.
-- [ ] Support `field=roaster|product|grinder`, optional prefix `q`, and the specified limit. Require `roaster` for product suggestions and reject it for the other fields.
-- [ ] Query only lookup rows referenced by at least one current entry. Return canonical names, case-insensitively sorted, in `{ "values": [...] }`.
-- [ ] Ensure deleted entries no longer cause otherwise unreferenced names to appear; an unknown roaster returns an empty product list.
+- [x] Register `GET /suggestions` before `GET /{id}`.
+- [x] Support `field=roaster|product|grinder`, optional prefix `q`, and the specified limit. Require `roaster` for product suggestions and reject it for the other fields.
+- [x] Query only lookup rows referenced by at least one current entry. Return canonical names, case-insensitively sorted, in `{ "values": [...] }`.
+- [x] Ensure deleted entries no longer cause otherwise unreferenced names to appear; an unknown roaster returns an empty product list.
 
 **Checkpoint:** Suggestions are useful for existing names but do not restrict entry creation to suggested values.
 
