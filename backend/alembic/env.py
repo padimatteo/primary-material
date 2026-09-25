@@ -1,12 +1,12 @@
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+import app.coffee.models  # noqa: F401
+from alembic import context
 from app.config import DATABASE_URL
 from app.database import Base
 
-# Import model modules here as they are added so their tables register on Base.metadata.
 target_metadata = Base.metadata
 config = context.config
 if config.config_file_name is not None:

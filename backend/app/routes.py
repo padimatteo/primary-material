@@ -5,7 +5,6 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import engine
 
-
 router = APIRouter()
 
 

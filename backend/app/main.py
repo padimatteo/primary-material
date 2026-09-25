@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.coffee.routes import router as coffee_router
 from app.routes import router
-
 
 app = FastAPI(
     title="Homebase API",
@@ -19,4 +19,4 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix="/api")
-
+app.include_router(coffee_router, prefix="/api")

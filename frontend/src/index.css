@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap');
 
 :root {
-  --paper: #f5f1e8;
-  --ink: #203027;
-  --muted: #6e756f;
-  --faint: #9c9c91;
-  --line: #dcd7cb;
-  --forest: #284e3b;
-  --sage: #dce5d8;
-  --clay: #a65d42;
+  --paper: var(--mui-palette-background-default);
+  --ink: var(--mui-palette-text-primary);
+  --muted: var(--mui-palette-text-secondary);
+  --faint: var(--mui-palette-text-disabled);
+  --line: var(--mui-palette-divider);
+  --forest: var(--mui-palette-primary-main);
+  --sage: var(--mui-palette-primary-light);
+  --clay: var(--mui-palette-secondary-main);
   --sans: 'DM Sans', system-ui, sans-serif;
   --serif: 'Newsreader', Georgia, serif;
 
